@@ -38,33 +38,8 @@ import base64
 import sys
 
 def dotNetUrlTokenEncode(string):
-    """
-    Ported from padbuster v0.3 by Brian Holyfield:
-
-    sub web64Decode {
-     my ($input, $net) = @_;
-     # net: 0=No Padding Number, 1=Padding (NetUrlToken)
-     $input =~ s/\-/\+/g;
-     $input =~ s/\_/\//g;
-     if ($net == 1)
-     {
-      my $count = chop($input);
-      $input = $input.("=" x int($count));
-     }
-     return decode_base64($input);
-    }
-    """
     return base64.urlsafe_b64encode(string)# string.urlsafe_b64encode()
 
-    string = string.encode("base64")
-
-    string = string.replace("+", "-").replace("/", "_")
-    count = string[-1]
-
-    #if count.isdigit():
-    #    string = string[:-1] + ("=" * int(count))
-
-    return string
 
 #from https://github.com/inquisb/miscellaneous/blob/master/ms10-070_check.py
 def dotNetUrlTokenDecode(string):
@@ -95,15 +70,10 @@ Decoded d value: <binary output>
 Length: 60
 D value length of 60 is not evenly divisible by 8, your application is patched
 
-Z:\Desktop\Client\AttackTools\DotNetDValueDecode>python dotnetdvaluedecode.py -d 2nYOzoKtRvjs-g53K3r7VKmEXeQl_XMNY8nDEwcgwGVcS5Z8b9GanbNdzIgg493kfB_oI
+python dotnetdvaluedecode.py -d 2nYOzoKtRvjs-g53K3r7VKmEXeQl_XMNY8nDEwcgwGVcS5Z8b9GanbNdzIgg493kfB_oI
 Length: 72
-D value length of 72 is evenly divisible by 8, 8our application is likely vulnerable (try more d values if unsure)
+D value length of 72 is evenly divisible by 8, your application is likely vulnerable (try more d values if unsure)
 
-  With ScriptResource.axd 'd' block:
-  $ ./dotnetdvaluedecode.py -e 2nYOzoKtRvjs-g53K3r7VKmEXeQl_XMNY8nDEwcgwGVcS5Z8b9GanbNdzIgg493kfB_oInMb2DtFFEy5e-ajqdwMbg1F96l10
-  Your application is VULNERABLE, patch against MS10-070
-
-  With WebResource.axd 'd' block:
   $ ./dotnetdvaluedecode.py -e asdfasdfasdfasdf123123123234
   YXNkZmFzZGZhc2RmYXNkZjEyMzEyMzEyMzIzNA==
   Length:
